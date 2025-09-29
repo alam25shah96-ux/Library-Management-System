@@ -1,0 +1,46 @@
+/* 
+----------------
+Sidebar Toggle 
+----------------
+*/
+@media (max-width: 1199.98px) {
+    .layout-menu {
+        transform: translate3d(-100%, 0, 0);
+        transition: transform 0.3s ease-in-out !important;
+    }
+    #sidebarMenu:checked ~ .layout-menu {
+        transform: translate3d(0%, 0, 0) !important;
+    }
+    .bg-layer{
+        transition: all .3s ease-in-out;
+    }
+    #sidebarMenu:checked ~ .bg-layer{
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(67, 89, 113, .5);
+        z-index: 1090;
+    }
+}
+
+.menu-sub {
+  display: block !important;
+  transition: all .3s ease-in-out !important;
+}
+
+.menu-sub.open {
+  max-height: 500px; /* enough for submenu height */
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible; 
+}
+
+.menu-sub.closed {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
