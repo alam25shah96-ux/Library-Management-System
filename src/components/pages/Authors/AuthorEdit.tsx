@@ -1,54 +1,80 @@
+import { Link, useParams } from "react-router-dom";
+import api from "../../../config";
+import { useEffect, useState } from "react";
+import type { Author } from "../../../interfaces/author.interface";
+import authorDefault from "../../../interfaces/author.interface";
 
+function EditAuthor() {
+     const params = useParams();
+    const [author, setAuthor] = useState<Author>(authorDefault);
+   
 
-import {Link} from 'react-router-dom';
-function AuthorEdit() {
+    useEffect(() => {
+        document.title = "Edit Authors";
+        getDataById();
+    }, []);
+
+    const getDataById = () => {
+         api.get(`author?id=${params.id}`)
+        .then((res) => {
+            setAuthor(res.data);      
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+    };
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        api.put(`edit-author`, author)
+        .then((res) => {
+            console.log(res.data);
+             alert("Data updated");
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+    };
     return (
         <>
-            <div className="content-wrapper">
-                <div className="content-header">
-                    <div className="container-fluid">
-                        <div className="row mb-2">
-                            <div className="col-sm-12">
-                                <section className="content">
-                                    <div className="container-fluid mt-3">
-                                        <h1>Edit Authors</h1>
-                                        <Link to={'/AuthorsManage'} className="btn btn-primary mb-3">Back to Manage</Link>
-                                        <div className="card">
-                                            <form method="post">
-                                                <div className="card-body">
-                                                    <input type="hidden" name="id" value=">" />
-                                                    <div className="htmlForm-group mb-3">
-                                                        <label htmlFor="name">Name</label><br />
-                                                        <input type="text" className="htmlForm-control" name="name" id="name"
-                                                            value="" />
-                                                    </div>
-                                                    <div className="htmlForm-group mb-3">
-                                                        <label htmlFor="email">Date of Birth</label><br />
-                                                        <input type="text" className="htmlForm-control" name="email" id="email"
-                                                            value="" />
-                                                    </div>
-                                                    <div className="htmlForm-group mb-3">
-                                                        <label htmlFor="password">Nationality</label><br />
-                                                        <input type="text" className="htmlForm-control" name="password" id="password"
-                                                            value="" />
-                                                    </div>
-                                                </div>
-                                                <div className="card-footer">
-                                                    <button type="submit" className="btn btn-success">Update</button>
-                                                </div>
-                                            </form>
-                                        </div>
-
-                                    </div>
-                                </section>
-                            </div>
-                        </div>
+        <div className="container-xxl flex-grow-1 container-p-y">
+          <h4 className="fw-bold py-3 mb-4">
+            <Link to="/author/manage" className="text-muted fw-light">Authors /</Link> Edit
+          </h4>
+          <div className="card mt-3">
+            <h5 className="card-header">Edit Authors</h5>
+            <div className="card-body">
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <label className="form-label">Name</label>
+                        <input type="text" name="name" className="form-control"
+                        value={author.name}
+                        onChange={(e) => setAuthor({...author, name: e.target.value})} />
                     </div>
-                </div>
-
+                    <div className="mb-3">
+                        <label className="form-label">Date Of Birth</label>
+                        <input type="text" name="date_of_birth" className="form-control"
+                        value={author.date_of_birth}
+                        onChange={(e) => setAuthor({...author, date_of_birth: e.target.value})} />
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">Nationality</label>
+                        <input type="text" name="nationality" className="form-control"
+                        value={author.nationality}
+                        onChange={(e) => setAuthor({...author, nationality: e.target.value})} />
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">Created At</label>
+                        <input type="text" name="created_at" className="form-control"
+                        value={author.created_at}
+                        onChange={(e) => setAuthor({...author, created_at: e.target.value})} />
+                    </div>
+                    <button type="submit" className="btn btn-primary">Update</button>
+                </form>
             </div>
+          </div>
+        </div>
         </>
-    )
+    );
 }
 
-export default AuthorEdit;
+export default EditAuthor;

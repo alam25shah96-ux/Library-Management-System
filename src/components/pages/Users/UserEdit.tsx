@@ -1,59 +1,94 @@
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import api from "../../../config";
+import { useEffect,useState } from "react";
+import type { Role } from "../../../interfaces/role.interface";
+import type { User } from "../../../interfaces/user.interface";
+import userDefault from "../../../interfaces/user.interface";
+import { useParams } from 'react-router-dom' 
 
 function UserEdit() {
-    return (
-        <>
-            <div className="content-wrapper">
-                <div className="content-header">
-                    <div className="container-fluid">
-                        <div className="row mb-2">
-                            <div className="col-sm-12">
-                                <section className="content">
-                                    <div className="container-fluid mt-3">
-                                        <h1>Edit Admin Users</h1>
-                                        <Link to={'/user'} className="btn btn-primary mb-3">Back to Manage</Link>
-                                        <div className="card">
-                                            <form method="post">
-                                                <div className="card-body">
-                                                    <input type="hidden" name="id" value=">" />
-                                                    <div className="htmlForm-group mb-3">
-                                                        <label htmlFor="name">Name</label><br />
-                                                        <input type="text" className="htmlForm-control" name="name" id="name"
-                                                            value="" />
-                                                    </div>
-                                                    <div className="htmlForm-group mb-3">
-                                                        <label htmlFor="email">Email</label><br />
-                                                        <input type="text" className="htmlForm-control" name="email" id="email"
-                                                            value="" />
-                                                    </div>
-                                                    <div className="htmlForm-group mb-3">
-                                                        <label htmlFor="password">Password</label><br />
-                                                        <input type="text" className="htmlForm-control" name="password" id="password"
-                                                            value="" />
-                                                    </div>
-                                                    <div className="htmlForm-group mb-3">
-                                                        <label htmlFor="role_id">Role Id</label><br />
-                                                        <input type="text" className="htmlForm-control" name="role_id" id="role_id"
-                                                            value="" />
-                                                    </div>
-                                                </div>
-                                                <div className="card-footer">
-                                                    <button type="submit" className="btn btn-success">Update</button>
-                                                </div>
-                                            </form>
-                                        </div>
-
-                                    </div>
-                                </section>
-                            </div>
-                        </div>
-                    </div>
+     const params = useParams();
+    const [role, setRole] = useState<Role[]>([]);
+    const [user, setUser] = useState<User>(userDefault);
+    useEffect(() => {
+        document.title = "Create User";
+        getRoles();
+        getUser();
+    },[]);
+    const getRoles = () => {
+        api.get("role")
+        .then((res) => {
+            // console.log(res.data);
+            setRole(res.data);
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+    }
+     const getUser = ()=>{
+        api.get(`user?id=${params.id}`)
+        .then((res)=>{
+            console.log(res.data);
+            setUser(res.data);
+        })
+        .catch((err)=>{
+            console.error(err);
+        })
+    }
+   
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log(user);
+        api.put(`user-edit`, user)
+        .then((res)=>{
+            console.log(res.data);
+            alert("Data updated successfully");
+        })
+        .catch((err)=>{
+            console.error(err);
+        })
+    }
+  return (
+    <>
+    <div className="container-xxl flex-grow-1 container-p-y">
+      <h4 className="fw-bold py-3 mb-4"><Link to="/user/manage" className="text-muted fw-light">Users/</Link> Edit</h4>
+      <div className="card mt-3">
+        <h5 className="card-header">Edit User</h5>
+        <div className="card-body">
+            <form onSubmit={handleSubmit}>
+                
+                <div className="mb-3">
+                    <label className="form-label">User Name</label>
+                    <input type="text" name="name" className="form-control" value={user.name} onChange={(e)=>setUser({...user, name: e.target.value})} />
                 </div>
-
-            </div>
-        </>
-    )
+                <div className="mb-3">
+                    <label className="form-label">User Mail</label>
+                    <input type="text" name="name" className="form-control" value={user.email} onChange={(e)=>setUser({...user, email: e.target.value})} />
+                </div>
+               
+                
+              
+                <div className="mb-3">
+                    <label className="form-label">Role</label>
+                    <select name="role" className="form-select" value={user.role} onChange={(e)=>setUser({...user, role: e.target.value})}>
+                        <option value="0" disabled>Select one...</option>
+                        {
+                            role.map((role)=>
+                                <option value={role.id} key={role.id}>{role.role_name}</option>
+                            )   
+                        }
+                    </select>
+                </div>
+                
+               
+                <button type="submit" className="btn btn-primary">Submit</button>
+            </form>
+        </div>
+      </div>
+    </div>
+    </>
+  )
 }
 
 export default UserEdit;

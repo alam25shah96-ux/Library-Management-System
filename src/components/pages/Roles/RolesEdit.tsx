@@ -1,44 +1,61 @@
+import { Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import api from '../../../config';
+import { useEffect, useState } from 'react';
+import roleDefault from '../../../interfaces/role.interface';
 
-import {Link} from "react-router-dom"
-function RolesEdit() {
+function EditRole() {
+    const params = useParams();
+    const [role, setRole] = useState(roleDefault);
+    useEffect(() => {
+        getRole();
+    },[params.id])
+    const getRole = ()=>{
+        api.get(`role?id=${params.id}`)
+        .then((res)=>{
+            console.log(res.data);
+            setRole(res.data);
+        })
+        .catch((err)=>{
+            console.error(err);
+        })
+    }
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log(role);
+        api.put(`edit-role`, role)
+        .then((res)=>{
+            console.log(res.data);
+            alert("Data updated successfully");
+        })
+        .catch((err)=>{
+            console.error(err);
+        })
+    }
   return (
     <>
-      <div className="content-wrapper">
-                <div className="content-header">
-                    <div className="container-fluid">
-                        <div className="row mb-2">
-                            <div className="col-sm-12">
-                                <section className="content">
-                                    <div className="container-fluid mt-3">
-                                        <h1>Edit Roles</h1>
-                                        <Link to={'/roles'} className="btn btn-primary mb-3">Back to Manage</Link>
-                                        <div className="card">
-                                            <form method="post">
-                                                <div className="card-body">
-                                                    <input type="hidden" name="id" value=">" />
-                                                    <div className="htmlForm-group mb-3">
-                                                        <label htmlFor="name">Name</label><br />
-                                                        <input type="text" className="htmlForm-control" name="name" id="name"
-                                                            value="" />
-                                                    </div>
-                                        
-                                                </div>
-                                                <div className="card-footer">
-                                                    <button type="submit" className="btn btn-success">Update</button>
-                                                </div>
-                                            </form>
-                                        </div>
-
-                                    </div>
-                                </section>
-                            </div>
-                        </div>
-                    </div>
+    <div className="container-xxl flex-grow-1 container-p-y">
+      <h4 className="fw-bold py-3 mb-4"><Link to="/role/manage/" className="text-muted fw-light">Roles /</Link> Edit</h4>
+      <div className="card mt-3">
+        <h5 className="card-header">Edit Role</h5>
+        <div className="card-body">
+            <form onSubmit={handleSubmit}>
+                <input type="hidden" value={params.id} />
+                <div className="mb-3">
+                    <label className="form-label">Name</label>
+                    <input type="text" name="name" className="form-control" value={role.role_name} onChange={(e)=>setRole({...role, role_name: e.target.value})} />
                 </div>
-
-            </div>
+                <div className="mb-3">
+                    <label className="form-label">Description</label>
+                    <input type="text" name="name" className="form-control" value={role.description} onChange={(e)=>setRole({...role, description: e.target.value})} />
+                </div>
+                <button type="submit" className="btn btn-primary">Update</button>
+            </form>
+        </div>
+      </div>
+    </div>
     </>
   )
 }
 
-export default RolesEdit;
+export default EditRole

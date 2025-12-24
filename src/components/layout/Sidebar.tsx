@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom"
+import {  NavLink } from "react-router-dom"
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,9 +9,9 @@ function Sidebar() {
     <>
     <input type="checkbox" id="sidebarMenu" className="d-none" />
     <label htmlFor="sidebarMenu" className="bg-layer"></label>
-    <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
-            <div className="app-brand demo bg-warning card">
-              <a href="index.html" className="app-brand-link">
+    <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme ">
+            <div className="app-brand demo  card">
+              <a href="index.html" className="app-brand-link ">
                 <span className="app-brand-logo demo">                  
                 </span>
                 <span className="app-brand-text demo menu-text fw-bolder ms-2 mt-3 text-black">aLibrary</span>
@@ -21,67 +21,67 @@ function Sidebar() {
 
             <div className="menu-inner-shadow"></div>
 
-            <ul className="menu-inner py-1 bg-black card">
-              {/* Dashboard */}
+            <ul className="menu-inner py-1  card">
+            
               <NavLink to="/" className="menu-item">
                 <li className="menu-link">
                   <i className="menu-icon tf-icons bx bx-home-circle"></i>
-                  <div data-i18n="Analytics" className="text-warning">Dashboard</div>
+                  <div data-i18n="Analytics" className="text-black fw-bold">Dashboard</div>
                 </li>
               </NavLink>
 
-              {/* Custom Menu */}
               
-              <NavLink to="/user" className={({isActive})=>isActive ? "menu-item active" : "menu-item"}>
+              
+              <NavLink to="/user/manage/" className={({isActive})=>isActive ? "menu-item active" : "menu-item"}>
                 <li className="menu-link">
                   <i className="menu-icon tf-icons bx bx-box"></i>
-                  <div className="text-info" data-i18n="Analytics">Users</div>
+                  <div className="text" data-i18n="Analytics">Users</div>
                 </li>
               </NavLink>
-              <NavLink to="/roles" className={({isActive})=>isActive ? "menu-item active" : "menu-item"}>
+              <NavLink to="/role/manage/" className={({isActive})=>isActive ? "menu-item active" : "menu-item"}>
                 <li className="menu-link">
                   <i className="menu-icon tf-icons bx bx-box"></i>
-                  <div className="text-info" data-i18n="Analytics">Roles</div>
+                  <div className="text" data-i18n="Analytics">Roles</div>
                 </li>
               </NavLink>
-              <NavLink to="/BookManage" className={({isActive})=>isActive ? "menu-item active" : "menu-item"}>
+              <NavLink to="/books/manage" className={({isActive})=>isActive ? "menu-item active" : "menu-item"}>
                 <li className="menu-link">
                   <i className="menu-icon tf-icons bx bx-box"></i>
-                  <div className="text-info" data-i18n="Analytics">Books</div>
+                  <div className="text" data-i18n="Analytics">Books</div>
                 </li>
               </NavLink>
-              <NavLink to="/AuthorsManage" className={({isActive})=>isActive ? "menu-item active" : "menu-item"}>
+              <NavLink to="/author/manage/" className={({isActive})=>isActive ? "menu-item active" : "menu-item"}>
                 <li className="menu-link">
                   <i className="menu-icon tf-icons bx bx-box"></i>
-                  <div className="text-info" data-i18n="Analytics">Authors</div>
+                  <div className="text" data-i18n="Analytics">Authors</div>
                 </li>
               </NavLink>
-              <NavLink to="/MemberManage" className={({isActive})=>isActive ? "menu-item active" : "menu-item"}>
+              <NavLink to="/member/manage/" className={({isActive})=>isActive ? "menu-item active" : "menu-item"}>
                 <li className="menu-link">
                   <i className="menu-icon tf-icons bx bx-box"></i>
-                  <div className="text-info" data-i18n="Analytics">Members</div>
+                  <div className="text" data-i18n="Analytics">Members</div>
                 </li>
               </NavLink>
-              <NavLink to="/IsseuBookManage" className={({isActive})=>isActive ? "menu-item active" : "menu-item"}>
+              <NavLink to="/loan/manage/" className={({isActive})=>isActive ? "menu-item active" : "menu-item"}>
                 <li className="menu-link">
                   <i className="menu-icon tf-icons bx bx-box"></i>
-                  <div className="text-info" data-i18n="Analytics">Issued books</div>
+                  <div className="text" data-i18n="Analytics">Issue books</div>
                 </li>
               </NavLink>
               <NavLink to="/FinesManage" className={({isActive})=>isActive ? "menu-item active" : "menu-item"}>
                 <li className="menu-link">
                   <i className="menu-icon tf-icons bx bx-box"></i>
-                  <div className="text-info" data-i18n="Analytics">Fines</div>
+                  <div className="text" data-i18n="Analytics">Fines</div>
                 </li>
               </NavLink>
-              <NavLink to="/CategoryManage" className={({isActive})=>isActive ? "menu-item active" : "menu-item"}>
+              <NavLink to="/category/Manage/" className={({isActive})=>isActive ? "menu-item active" : "menu-item"}>
                 <li className="menu-link">
                   <i className="menu-icon tf-icons bx bx-box"></i>
-                  <div className="text-info" data-i18n="Analytics">Categories</div>
+                  <div className="text" data-i18n="Analytics">Categories</div>
                 </li>
               </NavLink>
 
-              {/* Layouts */}
+             
                <li className="menu-header small text-uppercase">
                 <span className="menu-header-text">Layout</span>
               </li>

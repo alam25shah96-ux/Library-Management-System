@@ -1,50 +1,76 @@
+import { Link } from "react-router-dom";
+import api from "../../../config";
+import { useEffect,useState } from "react";
+import type { Role } from "../../../interfaces/role.interface";
+import type { User } from "../../../interfaces/user.interface";
+import userDefault from "../../../interfaces/user.interface";
 
-import {Link} from 'react-router-dom';
 function UserCreate() {
+    const [role, setRole] = useState<Role[]>([]);
+    const [user, setUser] = useState<User>(userDefault);
+    useEffect(() => {
+        document.title = "Create User";
+        getRoles();
+    },[]);
+    const getRoles = () => {
+        api.get("role")
+        .then((res) => {
+            // console.log(res.data);
+            setRole(res.data);
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+    }
+   
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        // console.log(role);
+        api.post(`create-user`, user)
+        .then((res)=>{
+            console.log(res);
+            alert("Data saved successfully");
+        })
+        .catch((err)=>console.error(err));
+    }
   return (
     <>
-      <div className="content-wrapper">
-        <div className="content-header">
-          <div className="container-fluid">
-            <div className="row mb-2">
-              <div className="col-sm-12">
-                <section className="content">
-                  <div className="container-fluid mt-3">
-                    <h1>Create Admin Users</h1>
-                    <Link to={'/user'} className="btn btn-primary mb-3">Back to Manage</Link>
-                    <form method="post">
-                      <input type="hidden" name="id"/>
-                        <div className="card-body">
-                          <div className="htmlForm-group mb-3">
-                            <label htmlFor="name">Name</label><br />
-                            <input type="text" className="htmlForm-control" name="name" id="name"/>
-                          </div>
-                          <div className="htmlForm-group mb-3">
-                            <label htmlFor="email">Email</label><br />
-                            <input type="text" className="htmlForm-control" name="email" id="email"/>
-                          </div>
-                          <div className="htmlForm-group mb-3">
-                            <label htmlFor="password">Password</label><br />
-                            <input type="text" className="htmlForm-control" name="password" id="password"/>
-                          </div>
-                          <div className="htmlForm-group mb-3">
-                            <label htmlFor="role_id">Role Id</label><br />
-                            <input type="text" className="htmlForm-control" name="role_id" id="role_id"/>
-                          </div>
-                        </div>
-                        <div className="card-footer">
-                          <button type="submit" className="btn btn-success">Submit</button>
-                        </div>
-                    </form>
-                  </div>
-                </section>
-              </div>
-            </div>
-          </div>
+    <div className="container-xxl flex-grow-1 container-p-y">
+      <h4 className="fw-bold py-3 mb-4"><Link to="/user/manage" className="text-muted fw-light">Users/</Link> Create</h4>
+      <div className="card mt-3">
+        <h5 className="card-header">Create User</h5>
+        <div className="card-body">
+            <form onSubmit={handleSubmit}>
+                
+                <div className="mb-3">
+                    <label className="form-label">User Name</label>
+                    <input type="text" name="name" className="form-control" value={user.name} onChange={(e)=>setUser({...user, name: e.target.value})} />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Email</label>
+                    <input type="text" name="name" className="form-control" value={user.email} onChange={(e)=>setUser({...user, email: e.target.value})} />
+                </div>
+               
+                
+              
+                <div className="mb-3">
+                    <label className="form-label">Role</label>
+                    <select name="role" className="form-select" value={user.role} onChange={(e)=>setUser({...user, role: e.target.value})}>
+                        <option value="0" disabled>Select one...</option>
+                        {
+                            role.map((role)=>
+                                <option value={role.id} key={role.id}>{role.role_name}</option>
+                            )   
+                        }
+                    </select>
+                </div>
+                
+               
+                <button type="submit" className="btn btn-primary">Submit</button>
+            </form>
         </div>
-
       </div>
-
+    </div>
     </>
   )
 }

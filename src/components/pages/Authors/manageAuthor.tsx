@@ -1,88 +1,81 @@
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../../../config";
-import type { Member } from "../../../interfaces/member.interface";
+import type { Author } from "../../../interfaces/author.interface";
 import { Link } from "react-router-dom";
 
+function ManageAuthor() {
+  const [authors, setAuthors] = useState<Author[]>([]);
+  const [authorId, setAuthorId] = useState<number | undefined>(0);
 
 
-function Memberss() {
-  const [member, setMember] = useState<Member[]>([]);
-  const [memberId, setMemberId] = useState<number | undefined>(0);
-  
-
-  const getMembers = () => {
-    api.get("member")
+  const getAuthors = () => {
+    api.get("authors")
     .then((res) => {
       console.log(res.data);
-      setMember(res.data);
+      setAuthors(res.data);
     })
     .catch((err) => {
       console.error(err);
-    })
-  }
-  
-  useEffect(() => {
-    document.title = "Manage Member";
-    getMembers();
-  },[]);
-  
+    });
+  };
 
-  function handleDelete(m_id:any){
-   
-    api.delete(`delete-member`,{
+  useEffect(() => {
+    document.title = "Manage Authors";
+    getAuthors();
+  }, []);
+
+  function handleDelete(id: number) {
+    api.delete(`delete-author`, {
       params: {
-        id: m_id,
-       
+        id: id,
       }
     })
     .then((res) => {
       console.log(res.data);
-      getMembers();
+      alert("Delete success");
+      getAuthors();
     })
     .catch((err) => {
       console.error(err);
-    })
-  }  
-  
+    });
+  }
+
   return (
     <>
     <div className="container-xxl flex-grow-1 container-p-y">
-      <h4 className="fw-bold py-3 mb-4"><span className="text-muted fw-light">Member /</span> Manage</h4>
-      <Link to="/member/create/" className="btn btn-primary">Add New</Link>
+      <h4 className="fw-bold py-3 mb-4"><Link to="/authors" className="text-muted fw-light">Authors </Link> / Manage</h4>
+      <Link to="/authors/create/" className="btn btn-primary">Add New</Link>
       <div className="card mt-3">
-        <div className="table-responsive px-2">          
-            <table  className="table table-striped">
+        <div className="table-responsive">
+            <table className="table table-striped">
                 <thead>
                     <tr>
-                       <th>Member Id</th>
+                       <th>Id</th>
                        <th>Name</th>
-                       <th>Email</th>
-                       <th>Phone</th>
-                       <th>Address</th>
-                       <th>MemberShip Date</th>
-                       <th>Actions</th>
+                       <th>Date Of Birth</th>
+                       <th>Nationality</th>
+                       <th>Created At</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
-                        member.map((item) => (
-                             <tr key={item.id}>
-                                <td>{item.id}</td>                             
+                        authors.map((item) => (
+                            <tr key={item.id}>
+                                <td>{item.id}</td>
                                 <td>{item.name}</td>
-                                <td>{item.email}</td>
-                                <td>{item.phone}</td>
-                                <td>{item.address}</td>
-                                <td>{item.membership_date}</td>
-                               
+                                <td>{item.date_of_birth}</td>
+                                <td>{item.nationality}</td>
+                                <td>{item.created_at}</td>
                                 <td>
                                     <div className="d-flex gap-1">
-                                        <Link to={`/user/details/${item.id}`} type="button" className="btn btn-icon btn-outline-info">
+                                        <Link to={`/authors/details/${item.id}`} className="btn btn-icon btn-outline-info">
                                             <span className="tf-icons bx bx-search"></span>
                                         </Link>
-                                        <Link to={`/user/edit/${item.id}`} type="button" className="btn btn-icon btn-outline-primary">
+                                        <Link to={`/authors/edit/${item.id}`} className="btn btn-icon btn-outline-primary">
                                             <span className="tf-icons bx bx-edit"></span>
                                         </Link>
-                                        <button type="button" className="btn btn-icon btn-outline-danger" onClick={()=>setMemberId(item?.id)} data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                        <button type="button" className="btn btn-icon btn-outline-danger" onClick={() => setAuthorId(item?.id)} data-bs-toggle="modal" data-bs-target="#deleteModal">
                                             <span className="tf-icons bx bx-trash"></span>
                                         </button>
                                     </div>
@@ -109,13 +102,13 @@ function Memberss() {
           </div>
           <div className="modal-footer justify-content-center">
             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={()=>handleDelete(memberId)}>Delete</button>
+            <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={() => handleDelete(authorId!)}>Delete</button>
           </div>
         </div>
       </div>
     </div>
     </>
-  )
+  );
 }
 
-export default Memberss;
+export default ManageAuthor;

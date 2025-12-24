@@ -44,3 +44,22 @@ Sidebar Toggle
   pointer-events: none;
   visibility: hidden;
 }
+/* .divuser{
+
+background-color: rgb(231, 215, 241);
+
+} */
+
+.divDiv{
+
+background-color: rgb(208, 212, 212);
+border-radius: 10px;
+
+}
+.divC{
+
+  background-color: rgb(240, 247, 246);
+}
+.text{
+  color: rgb(8, 16, 1);
+}
